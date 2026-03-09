@@ -38,11 +38,15 @@ class PasswordProvider with ChangeNotifier {
   }) async {
     try {
       _lastError = null;
-      final encryptedPassword = _encryptionService.encryptPassword(password);
+
+      // Criptografar e obter IV
+      final encrypted = _encryptionService.encryptPassword(password);
+
       final entry = PasswordEntry(
         serviceName: serviceName,
         username: username,
-        encryptedPassword: encryptedPassword,
+        encryptedPassword: encrypted['password']!,
+        iv: encrypted['iv']!, // Salvar IV
         createdAt: DateTime.now(),
       );
 
@@ -64,12 +68,16 @@ class PasswordProvider with ChangeNotifier {
   }) async {
     try {
       _lastError = null;
-      final encryptedPassword = _encryptionService.encryptPassword(password);
+
+      // Criptografar e obter IV
+      final encrypted = _encryptionService.encryptPassword(password);
+
       final entry = PasswordEntry(
         id: id,
         serviceName: serviceName,
         username: username,
-        encryptedPassword: encryptedPassword,
+        encryptedPassword: encrypted['password']!,
+        iv: encrypted['iv']!, // Salvar IV
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );
@@ -97,9 +105,9 @@ class PasswordProvider with ChangeNotifier {
     }
   }
 
-  String decryptPassword(String encryptedPassword) {
+  String decryptPassword(String encryptedPassword, String? iv) {
     try {
-      return _encryptionService.decryptPassword(encryptedPassword);
+      return _encryptionService.decryptPassword(encryptedPassword, iv);
     } catch (e) {
       _lastError = 'Erro ao descriptografar: $e';
       return '***erro***';

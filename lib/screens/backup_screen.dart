@@ -57,14 +57,16 @@ class _BackupScreenState extends State<BackupScreen> {
     setState(() => _isLoading = true);
 
     try {
-      final file = await _backupService.exportPasswords(masterPassword: password);
-      
+      final file = await _backupService.exportPasswords(
+        masterPassword: password,
+      );
+
       if (file != null && mounted) {
         setState(() => _isLoading = false);
-        
+
         // Perguntar o que fazer com o arquivo
         final action = await _showExportOptionsDialog(file);
-        
+
         if (action == 'share') {
           await Share.shareXFiles(
             [XFile(file.path)],
@@ -72,9 +74,9 @@ class _BackupScreenState extends State<BackupScreen> {
             text: 'Backup criptografado do Gerenciador de Senhas',
           );
         }
-        
+
         await _loadBackupFiles();
-        
+
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -88,10 +90,7 @@ class _BackupScreenState extends State<BackupScreen> {
       setState(() => _isLoading = false);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Erro: $e'),
-            backgroundColor: Colors.red,
-          ),
+          SnackBar(content: Text('Erro: $e'), backgroundColor: Colors.red),
         );
       }
     }
@@ -131,7 +130,10 @@ class _BackupScreenState extends State<BackupScreen> {
 
       // Recarregar senhas
       if (mounted) {
-        await Provider.of<PasswordProvider>(context, listen: false).loadPasswords();
+        await Provider.of<PasswordProvider>(
+          context,
+          listen: false,
+        ).loadPasswords();
       }
 
       setState(() => _isLoading = false);
@@ -183,7 +185,9 @@ class _BackupScreenState extends State<BackupScreen> {
                   labelText: 'Senha Mestra',
                   border: const OutlineInputBorder(),
                   suffixIcon: IconButton(
-                    icon: Icon(obscure ? Icons.visibility : Icons.visibility_off),
+                    icon: Icon(
+                      obscure ? Icons.visibility : Icons.visibility_off,
+                    ),
                     onPressed: () => setDialogState(() => obscure = !obscure),
                   ),
                 ),
@@ -243,9 +247,7 @@ class _BackupScreenState extends State<BackupScreen> {
         title: const Text('Como Importar?'),
         content: const Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            Text('Escolha como deseja importar as senhas:'),
-          ],
+          children: [Text('Escolha como deseja importar as senhas:')],
         ),
         actions: [
           TextButton(
@@ -290,9 +292,9 @@ class _BackupScreenState extends State<BackupScreen> {
       await _backupService.deleteBackupFile(file);
       await _loadBackupFiles();
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Backup excluído')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Backup excluído')));
       }
     }
   }
@@ -310,9 +312,7 @@ class _BackupScreenState extends State<BackupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Backup e Restauração'),
-      ),
+      appBar: AppBar(title: const Text('Backup e Restauração')),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : ListView(
@@ -323,15 +323,22 @@ class _BackupScreenState extends State<BackupScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
-                        const Icon(Icons.cloud_upload, size: 64, color: Colors.blue),
+                        const Icon(
+                          Icons.cloud_upload,
+                          size: 64,
+                          color: Colors.blue,
+                        ),
                         const SizedBox(height: 16),
                         const Text(
                           'Exportar Senhas',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 8),
                         const Text(
-                          'Crie um backup criptografado de todas as suas senhas',
+                          'Crie um backup criptografado de todas as suas senhas.\nO arquivo pode ser compartilhado ou armazenado com segurança.',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.grey),
                         ),
@@ -354,15 +361,22 @@ class _BackupScreenState extends State<BackupScreen> {
                     padding: const EdgeInsets.all(16),
                     child: Column(
                       children: [
-                        const Icon(Icons.cloud_download, size: 64, color: Colors.green),
+                        const Icon(
+                          Icons.cloud_download,
+                          size: 64,
+                          color: Colors.green,
+                        ),
                         const SizedBox(height: 16),
                         const Text(
                           'Importar Senhas',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 8),
                         const Text(
-                          'Restaure suas senhas de um backup anterior',
+                          'Restaure suas senhas de um backup anterior.\n A SENHA MESTRA há de ser identica à do backup para funcionar.',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.grey),
                         ),
@@ -422,12 +436,14 @@ class _BackupScreenState extends State<BackupScreen> {
                                   ListTile(
                                     leading: const Icon(Icons.share),
                                     title: const Text('Compartilhar'),
-                                    onTap: () => Navigator.pop(context, 'share'),
+                                    onTap: () =>
+                                        Navigator.pop(context, 'share'),
                                   ),
                                   ListTile(
                                     leading: const Icon(Icons.restore),
                                     title: const Text('Restaurar'),
-                                    onTap: () => Navigator.pop(context, 'restore'),
+                                    onTap: () =>
+                                        Navigator.pop(context, 'restore'),
                                   ),
                                 ],
                               ),

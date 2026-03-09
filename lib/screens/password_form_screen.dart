@@ -33,7 +33,10 @@ class _PasswordFormScreenState extends State<PasswordFormScreen> {
       try {
         final provider = Provider.of<PasswordProvider>(context, listen: false);
         _passwordController = TextEditingController(
-          text: provider.decryptPassword(widget.entry!.encryptedPassword),
+          text: provider.decryptPassword(
+            widget.entry!.encryptedPassword,
+            widget.entry!.iv,
+          ),
         );
       } catch (e) {
         _passwordController = TextEditingController();

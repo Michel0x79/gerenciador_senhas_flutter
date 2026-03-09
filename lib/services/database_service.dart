@@ -22,8 +22,9 @@ class DatabaseService {
 
       return await openDatabase(
         path,
-        version: 1,
+        version: 2, // INCREMENTAR VERSÃO
         onCreate: _onCreate,
+        onUpgrade: _onUpgrade, // ADICIONAR MIGRAÇÃO
         onConfigure: (db) async {
           await db.execute('PRAGMA foreign_keys = ON');
         },
@@ -40,10 +41,19 @@ class DatabaseService {
         serviceName TEXT NOT NULL,
         username TEXT NOT NULL,
         encryptedPassword TEXT NOT NULL,
+        iv TEXT,
         createdAt TEXT NOT NULL,
         updatedAt TEXT
       )
     ''');
+  }
+
+  // NOVA FUNÇÃO DE MIGRAÇÃO
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      // Adicionar coluna iv se não existir
+      await db.execute('ALTER TABLE passwords ADD COLUMN iv TEXT');
+    }
   }
 
   Future<int> insertPassword(PasswordEntry entry) async {

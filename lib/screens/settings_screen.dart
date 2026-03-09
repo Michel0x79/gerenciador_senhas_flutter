@@ -132,7 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
-                const ListTile(title: Text('Versão'), subtitle: Text('1.0.0')),
+                const ListTile(title: Text('Versão'), subtitle: Text('1.2.0')),
                 const ListTile(
                   title: Text('Desenvolvido com Flutter e amor ❤️'),
                   subtitle: Text(

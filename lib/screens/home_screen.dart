@@ -30,7 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Senhas 🔑'),
+        title: const Text('Gerenciador de Senhas'),
         actions: [
           IconButton(
             icon: const Icon(Icons.vpn_key),
@@ -137,6 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   isVisible
                                       ? provider.decryptPassword(
                                           entry.encryptedPassword,
+                                          entry.iv,
                                         )
                                       : '••••••••',
                                   style: const TextStyle(
@@ -166,6 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onPressed: () {
                                   final password = provider.decryptPassword(
                                     entry.encryptedPassword,
+                                    entry.iv,
                                   );
                                   Clipboard.setData(
                                     ClipboardData(text: password),
