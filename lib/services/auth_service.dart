@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:local_auth/error_codes.dart' as auth_error;
+// import 'package:local_auth/error_codes.dart' as auth_error;
 import 'package:crypto/crypto.dart';
 import 'dart:convert';
 import 'package:flutter/services.dart';
@@ -89,7 +89,7 @@ class AuthService {
       );
 
       return authenticated;
-    } on PlatformException catch (e) {
+    } on PlatformException {
       return false;
     } catch (e) {
       return false;
